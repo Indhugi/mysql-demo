@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function sendData(){
+		function success(response){
+			console.log(response);
+		}
+		function errorHandler(error){
+			console.log(error);
+		}
+		const promise=fetch('/user',{
+		method:'POST',
+		headers:{
+			'Content-Type':'application/json'
+		},
+		body:JSON.stringify({
+			name:document.getElementById('username').value,
+			email:document.getElementById('email').value,
+			mobileNumber:document.getElementById('mobileNumber').value
+		})
+		});
+		promise.then(success);
+		promise.then(function(data){
+			console.log(data);
+		});
+		promise.catch(errorHandler);
+	}
+	function getUsers(){
+		const promise=fetch('/user');
+		promise.then(function(response){
+			return response.json();
+		})
+		.then(function(users){
+			console.log(users);
+			const table=document.getElementById('usersTable');
+			for(let index=0;index<users.length;index++){
+				console.log(users[index]);
+				const currentUser=users[index];
+				const row=document.createElement('tr');
+				const nameColumn=document.createElement('td');
+				const emailColumn=document.createElement('td');
+				const mobileNumberColumn=document.createElement('td');
+				nameColumn.append(currentUser.name);
+				emailColumn.append(currentUser.email);
+				mobileNumberColumn.append(currentUser.mobileNumber);
+				row.appendChild(nameColumn);
+				row.appendChild(emailColumn);
+				row.appendChild(mobileNumberColumn);
+				table.appendChild(row);
+			}
+		})
+	}
+</script>
+</head>
+<body>
+	<input placeholder="Name" id='username'>
+	<input type="email" placeholder="Email" id='email'>
+	<input type="number"placeholder="Mobile Number" id='mobileNumber'>
+	<button onclick="sendData()">Save</button>
+	<button onclick="getUsers()">GetUsers</button>
+	<table>
+	<thead>
+	<th>Name</th>
+	<th>Email</th>
+	<th>Mobile Number</th>
+	</thead>
+	<tbody id=usersTable>
+	</tbody>
+	</table>
+</body>
+</html>
