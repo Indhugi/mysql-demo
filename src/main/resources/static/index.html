@@ -11,6 +11,11 @@
 		function errorHandler(error){
 			console.log(error);
 		}
+		const userform=document.getElementById('userform');
+		if (!userform.checkValidity()){
+			alert('Form is invalid');
+			return;
+		}
 		const promise=fetch('/user',{
 		method:'POST',
 		headers:{
@@ -19,7 +24,8 @@
 		body:JSON.stringify({
 			name:document.getElementById('username').value,
 			email:document.getElementById('email').value,
-			mobileNumber:document.getElementById('mobileNumber').value
+			mobileNumber:document.getElementById('mobileNumber').value,
+			dobDate:document.getElementById('dob').value			
 		})
 		});
 		promise.then(success);
@@ -43,12 +49,15 @@
 				const nameColumn=document.createElement('td');
 				const emailColumn=document.createElement('td');
 				const mobileNumberColumn=document.createElement('td');
+				const dobColumn=document.createElement('td');
 				nameColumn.append(currentUser.name);
 				emailColumn.append(currentUser.email);
 				mobileNumberColumn.append(currentUser.mobileNumber);
+				dobColumn.append(currentUser.dobDate);
 				row.appendChild(nameColumn);
 				row.appendChild(emailColumn);
 				row.appendChild(mobileNumberColumn);
+				row.appendChild(dobColumn);
 				table.appendChild(row);
 			}
 		})
@@ -56,19 +65,23 @@
 </script>
 </head>
 <body>
-	<input placeholder="Name" id='username'>
-	<input type="email" placeholder="Email" id='email'>
-	<input type="number"placeholder="Mobile Number" id='mobileNumber'>
+	<form id='userform'>
+		<div><input placeholder="Name" id='username'  value="Indhu" required></div>
+		<div><input type="email" placeholder="Email" value="indhu@yahoo.com" id='email' required></div> 
+		<div><input type="tel" placeholder="Mobile Number" value="9098909800" id='mobileNumber' required></div>
+		<div><input type="date" placeholder="DOB" id="dob"></div>
+	</form>
 	<button onclick="sendData()">Save</button>
 	<button onclick="getUsers()">GetUsers</button>
 	<table>
-	<thead>
-	<th>Name</th>
-	<th>Email</th>
-	<th>Mobile Number</th>
-	</thead>
-	<tbody id=usersTable>
-	</tbody>
+		<thead>
+			<td>Name</td>
+			<td>Email</td>
+			<td>Mobile Number</td>
+			<td>DoB</td>
+		</thead>
+		<tbody id=usersTable>
+		</tbody>
 	</table>
 </body>
 </html>
